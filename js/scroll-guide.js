@@ -4,24 +4,26 @@
    1. Premium Gold Hand Scroll Guide:
       Displays a gold hand icon with upward swipe gesture, glowing
       pulse aura, and "Scroll to Explore" label after Hero loads.
-      Hides permanently upon the visitor's first scroll/gesture.
+      ALWAYS appears on every fresh page load / reload (no storage).
+      Hides cleanly as soon as the visitor scrolls the Hero section.
 
    2. Smart Auto Scroll Engine:
       Triggers after 5 seconds of inactivity post-Hero load.
       Scrolls sequentially: Hero (0) -> Events (1) -> Gallery (2) -> Location (3).
-      Pauses 2 seconds at each section. Stops at Location. No loop.
+      Fixed duration: 2.2s per section transition, 2.0s pause.
+      Stops upon reaching Location. Never loops.
 
-   3. Instant Cancellation:
-      Wheel, touch, swipe, click, drag, or keypress immediately and
-      permanently cancels auto-scroll and restores native control.
+   3. Instant Cancellation & Lock:
+      Prevents rapid wheel / reverse delta fluctuations.
+      Any user gesture immediately cancels auto-scroll and restores
+      native 60 FPS control to the visitor.
    ================================================================ */
 (function(){
-  var STORAGE_KEY = 'weddingScrollGuideDismissedSession';
   var hint = document.getElementById('scrollGuide');
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Always reset in memory on every fresh page load
   var dismissed = false;
-  try { dismissed = sessionStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { dismissed = false; }
 
   var autoScrollCancelled = false;
   var isAutoScrolling = false;
@@ -31,11 +33,10 @@
   var heroReady = false;
   var listenersAttached = false;
 
-  // Dismiss hand scroll guide
+  // Dismiss hand scroll guide (per page load)
   function dismissGuide(){
     if (dismissed) return;
     dismissed = true;
-    try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
     if (hint) {
       hint.classList.remove('on');
       hint.classList.add('hide');
@@ -45,7 +46,7 @@
     }
   }
 
-  // Cancel Auto Scroll immediately & permanently
+  // Cancel Auto Scroll immediately & permanently for current page session
   function cancelAutoScroll(reason){
     if (autoScrollCancelled) return;
     autoScrollCancelled = true;
@@ -63,6 +64,11 @@
     // Ignore clicks on opening poster button if opening layer is still active
     var op = document.getElementById('opening');
     if (op && !op.classList.contains('op-hidden') && !heroReady) return;
+
+    // Ignore tiny reverse wheel jitter during active transition to prevent fluctuation
+    if (e && e.type === 'wheel' && isAutoScrolling && e.deltaY < 0 && Math.abs(e.deltaY) < 4) {
+      return;
+    }
 
     cancelAutoScroll('user-input');
   }
@@ -83,7 +89,7 @@
     });
   }
 
-  // Easing curve for cinematic scrolling
+  // Exact cubic ease-in-out curve for cinematic scrolling
   function easeInOutCubic(t){
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
@@ -91,13 +97,13 @@
   function getSectionPositions(){
     var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll <= 0) return [0, 0, 0, 0];
-    return [0, maxScroll * 0.33333, maxScroll * 0.66667, maxScroll];
+    return [0, maxScroll * 0.333333, maxScroll * 0.666667, maxScroll];
   }
 
   var currentSectionIdx = 0;
 
   function scrollToNextSection(){
-    if (autoScrollCancelled || reduce) return;
+    if (autoScrollCancelled || reduce || isAutoScrolling) return;
     var positions = getSectionPositions();
     if (currentSectionIdx >= positions.length - 1){
       cancelAutoScroll('finished');
@@ -116,7 +122,7 @@
     }
 
     isAutoScrolling = true;
-    var duration = 2200; // 2.2s cinematic transition
+    var duration = 2200; // Exact 2.2s transition time for every section
     var startTime = performance.now();
 
     function step(now){
@@ -148,7 +154,7 @@
       cancelAutoScroll('finished');
       return;
     }
-    // Pause 2 seconds at each section
+    // Pause exactly 2.0 seconds at each section
     sectionPauseTimer = setTimeout(function(){
       sectionPauseTimer = null;
       scrollToNextSection();
@@ -166,12 +172,12 @@
     if (heroReady || autoScrollCancelled) return;
     heroReady = true;
 
-    // Show hand scroll guide
+    // Show hand scroll guide (always on every reload)
     if (!dismissed && hint) {
       hint.classList.add('on');
     }
 
-    // Now start listening for user interactions to cancel auto-scroll
+    // Attach listeners after Hero is visible
     attachInteractionListeners();
 
     // 5-second inactivity timer

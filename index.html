@@ -29,6 +29,16 @@
 <link rel="preload" as="image" href="assets/poster/poster.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Marcellus&family=Great+Vibes&family=Cormorant+Garamond:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script>
+(function(){
+  function updateViewport(){
+    var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--app-height', h + 'px');
+    document.documentElement.style.setProperty('--app-vh', (h * 0.01) + 'px');
+  }
+  updateViewport();
+})();
+</script>
 </head>
 <body>
 

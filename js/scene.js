@@ -59,6 +59,20 @@
     const max=document.documentElement.scrollHeight-innerHeight;
     targetP=max>0?Math.min(1,Math.max(0,scrollY/max)):0;
   }
+  let lastWindowWidth = window.innerWidth;
+  function updateAppViewport(){
+    const h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--app-height', h + 'px');
+    document.documentElement.style.setProperty('--app-vh', (h * 0.01) + 'px');
+  }
+  function onWindowResize(){
+    if (Math.abs(window.innerWidth - lastWindowWidth) > 5) {
+      lastWindowWidth = window.innerWidth;
+      updateAppViewport();
+    }
+    readScroll();
+    cachedStageW = stage.clientWidth;
+  }
   /* Perf: coalesce scroll reads into one rAF tick (avoids layout thrash
      from dozens of scroll events per frame on iOS momentum scrolling). */
   let scrollQueued=false;
@@ -67,7 +81,17 @@
     requestAnimationFrame(()=>{ scrollQueued=false; readScroll(); });
   }
   addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('resize',()=>{readScroll(); cachedStageW=stage.clientWidth;},{passive:true});
+  addEventListener('resize',onWindowResize,{passive:true});
+  addEventListener('orientationchange',()=>{ setTimeout(updateAppViewport, 150); },{passive:true});
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', ()=>{
+      if (Math.abs(window.innerWidth - lastWindowWidth) > 5) {
+        lastWindowWidth = window.innerWidth;
+        updateAppViewport();
+      }
+    }, {passive:true});
+  }
+  updateAppViewport();
   readScroll();
 
   const ease=x=>x*x*(3-2*x);
