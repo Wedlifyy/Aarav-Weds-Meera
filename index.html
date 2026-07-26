@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aarav &amp; Meera — Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="assets/poster/poster.jpg" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Marcellus&family=Great+Vibes&family=Cormorant+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ================================================================
+     OPENING CINEMATIC SEQUENCE: Poster -> Splash Video -> Hero
+     ----------------------------------------------------------------
+     Fixed asset filenames — clients only replace the files below,
+     never this markup:
+       assets/poster/poster.jpg   <- opening poster background
+       assets/videos/splash.mp4   <- opening splash video
+     Blocks scrolling until the visitor taps "Touch to Open" and the
+     splash video finishes, then fades away to reveal the Hero.
+     ================================================================ -->
+<div class="opening" id="opening">
+
+  <!-- The whole opening sequence is constrained to the same 9:16 frame
+       as the rest of the site (see .stage in css/style.css) so it
+       never stretches full-width on desktop — the gold page
+       background shows through as side gutters, exactly like every
+       other section. -->
+  <div class="opening-frame">
+
+    <!-- Screen 1: poster with couple names + "Touch to Open" -->
+    <div class="op-poster" id="opPoster">
+      <div class="op-bg"></div>
+      <div class="op-veil"></div>
+      <div class="op-content">
+        <p class="op-eyebrow">Together With Their Families</p>
+        <h1 class="op-names">
+          <span data-cfg="groomName">Aarav</span>
+          <span class="op-amp">&amp;</span>
+          <span data-cfg="brideName">Meera</span>
+        </h1>
+        <button class="op-btn" id="opBtn" type="button" aria-label="Touch to open the invitation">
+          <span class="op-btn-shimmer"></span>
+          <span class="op-btn-label">Touch to Open</span>
+          <div class="op-btn-hand" aria-hidden="true">
+            <div class="op-hand-pulse"></div>
+            <svg class="op-hand-svg" viewBox="0 0 36 42" fill="none">
+              <path d="M18 6C16.9 6 16 6.9 16 8V20.5L14.4 18.7C13.7 17.9 12.4 17.9 11.6 18.6C10.8 19.3 10.8 20.6 11.6 21.4L17.2 27.5C19.1 29.5 21.7 30.6 24.4 30.6H25.8C28.7 30.6 31 28.3 31 25.4V19.8C31 18.7 30.1 17.8 29 17.8C27.9 17.8 27 18.7 27 19.8V21.8H25V15.8C25 14.7 24.1 13.8 23 13.8C21.9 13.8 21 14.7 21 15.8V21.8H19.5V8C19.5 6.9 18.6 6 17.5 6H18Z" fill="url(#opHandGold)" stroke="#8f6a2a" stroke-width="0.8"/>
+              <defs>
+                <linearGradient id="opHandGold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#fff0c4"/>
+                  <stop offset="45%" stop-color="#e6c66f"/>
+                  <stop offset="100%" stop-color="#b78a3c"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </button>
+      </div>
+      <canvas class="op-burst" id="opBurst" aria-hidden="true"></canvas>
+    </div>
+
+    <!-- Screen 2: splash video (silent — background music starts on tap instead) -->
+    <div class="op-video" id="opVideoWrap">
+      <video id="opVideo" playsinline webkit-playsinline preload="none" muted
+        poster="assets/poster/poster.jpg">
+        <source src="assets/videos/splash.mp4" type="video/mp4">
+      </video>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="viewport">
+  <div class="stage" id="stage">
+    <div class="scene" id="scene">
+      <div class="layer l-back"  id="Lback"></div>
+      <div class="layer l-mid"   id="Lmid"></div>
+      <div class="layer l-front" id="Lfront"></div>
+      <div class="bells b-left"  id="bellL"></div>
+      <div class="bells b-right" id="bellR"></div>
+      <div class="layer l-near"  id="Lnear"></div>
+      <canvas class="dust" id="dust"></canvas>
+      <div class="veil"></div>
+      <div class="sheen"></div>
+      <div class="glow" id="glow"></div>
+      
+      
+      
+      <div class="invite" id="invite">
+      <p class="inv-eyebrow">Together With Their Families</p>
+      <div class="inv-orn">✦ ─── ❦ ─── ✦</div>
+
+      
+
+      <!-- Couple photo, framed inside the gold heart (original design).
+           Replace assets/images/hero-photo.jpg to change the photo —
+           the heart frame/mask itself is a fixed design asset. -->
+      <div class="heartwrap">
+        <div class="heartglow"></div>
+        <div class="heartfloat">
+          <div class="heartphoto"></div>
+          <div class="heartframe"></div>
+        </div>
+      </div>
+
+      <div class="textzone"><div class="inv-names">
+        <span class="nm" data-cfg="groomName">Aarav</span>
+        <svg class="rings" viewBox="0 0 72 44" fill="none" aria-hidden="true">
+          <ellipse cx="28" cy="26" rx="13" ry="13.5" stroke="url(#gA)" stroke-width="3"/>
+          <ellipse cx="44" cy="26" rx="13" ry="13.5" stroke="url(#gB)" stroke-width="3"/>
+          <path d="M36 4 l2.6 4.2 -2.6 3.4 -2.6 -3.4 z" fill="#e6c66f"/>
+          <defs>
+            <linearGradient id="gA" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" style="stop-color:var(--gold)"/><stop offset=".5" style="stop-color:var(--gold-light)"/><stop offset="1" style="stop-color:var(--gold-deep)"/>
+            </linearGradient>
+            <linearGradient id="gB" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0" style="stop-color:var(--gold-deep)"/><stop offset=".5" style="stop-color:var(--gold-light)"/><stop offset="1" style="stop-color:var(--gold)"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="nm" data-cfg="brideName">Meera</span>
+      </div>
+
+      <svg class="inv-flourish" viewBox="0 0 200 16" fill="none">
+        <path d="M4 8 C 40 -4, 80 20, 100 8 C 120 -4, 160 20, 196 8"
+          stroke="#b78a3c" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="100" cy="8" r="2.4" fill="#b78a3c"/>
+      </svg>
+
+      <p class="savedate">Save The Date</p>
+      <div class="daterow">
+        <span class="dw" data-cfg="dateDay">SUN</span><span class="bar"></span>
+        <span class="dn" data-cfg="dateNum">21</span>
+        <span class="bar"></span><span class="dw" data-cfg="dateMonth">DEC</span>
+      </div>
+      <p class="year" data-cfg="dateYear">2026</p>
+
+      <p class="promise" data-cfg="quote">We promise to love, laugh<br>and grow together forever</p>
+
+      <div class="inv-heart-orn">
+        <span class="ln"></span>
+        <svg viewBox="0 0 32 30" aria-hidden="true">
+          <defs>
+            <linearGradient id="hg" x1="0" y1="0" x2="0.6" y2="1">
+              <stop offset="0" style="stop-color:var(--gold-light)"/><stop offset=".45" style="stop-color:var(--gold)"/>
+              <stop offset="1" style="stop-color:var(--gold-deep)"/>
+            </linearGradient>
+          </defs>
+          <path d="M16 27.5S3.2 19.6 3.2 10.9C3.2 6.2 6.9 3 10.9 3c2.4 0 4.2 1.2 5.1 2.6C16.9 4.2 18.7 3 21.1 3c4 0 7.7 3.2 7.7 7.9 0 8.7-12.8 16.6-12.8 16.6z"
+            fill="url(#hg)" stroke="#8f6a2a" stroke-width="1"/>
+          <path d="M11.6 7.4c-1.6.3-2.8 1.6-3 3.2" fill="none" stroke="#fff5da" stroke-width="1.3" stroke-linecap="round" opacity=".85"/>
+        </svg>
+        <span class="ln"></span>
+      </div></div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     SCROLL GUIDE — small animated "swipe up" hint
+     Shown briefly (once per section) for first-time visitors only.
+     Handled entirely by js/scroll-guide.js — nothing to edit here.
+     ================================================================ -->
+<div class="scroll-guide" id="scrollGuide" aria-hidden="true">
+  <div class="sg-glow"></div>
+  <div class="sg-icon-wrap">
+    <svg class="sg-hand" viewBox="0 0 36 42" fill="none" aria-hidden="true">
+      <path d="M18 6C16.9 6 16 6.9 16 8V20.5L14.4 18.7C13.7 17.9 12.4 17.9 11.6 18.6C10.8 19.3 10.8 20.6 11.6 21.4L17.2 27.5C19.1 29.5 21.7 30.6 24.4 30.6H25.8C28.7 30.6 31 28.3 31 25.4V19.8C31 18.7 30.1 17.8 29 17.8C27.9 17.8 27 18.7 27 19.8V21.8H25V15.8C25 14.7 24.1 13.8 23 13.8C21.9 13.8 21 14.7 21 15.8V21.8H19.5V8C19.5 6.9 18.6 6 17.5 6H18Z" fill="url(#sgGold)" stroke="#8f6a2a" stroke-width="0.8"/>
+      <path d="M18 4.5V1.5" stroke="url(#sgGoldLight)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M14 3.5L18 0.5L22 3.5" stroke="url(#sgGoldLight)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="sgGold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fff0c4"/>
+          <stop offset="45%" stop-color="#e6c66f"/>
+          <stop offset="100%" stop-color="#b78a3c"/>
+        </linearGradient>
+        <linearGradient id="sgGoldLight" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#f0dc9e"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="sg-label">Scroll to Explore</div>
+</div>
+
+<main>
+  <section class="panel"><div class="slot"><!-- section 1 --></div></section>
+  <section class="panel"><div class="slot"><!-- section 2 --></div></section>
+  <section class="panel"><div class="slot"><!-- section 3 --></div></section>
+  <section class="panel"><div class="slot"><!-- section 4 --></div></section>
+</main>
+
+<!-- Foreground UI layer: fixed above <main> so it can receive pointer events.
+     Transparent to pointers by default; only real controls opt in. -->
+<div class="fg-layer" id="fgLayer">
+  <div class="fg-box">
+    <div class="fg" id="fgEvents">
+        <div class="cloud"><div class="fg-head" data-ev="head"><span class="st">✦</span>EVENTS<span class="st">✦</span></div></div>
+        <div class="ev-list" data-ev="list"><!-- Event cards are rendered here at runtime from config.js (WEDDING_CONFIG.events) --></div>
+        <div class="cd-title" data-ev="cdtitle">COUNTDOWN TO OUR BIG DAY</div>
+        <div class="cd-row" data-ev="cd"><div class="cd-box"><div class="n" data-cd="days">--</div><div class="l">Days</div></div><div class="cd-box"><div class="n" data-cd="hours">--</div><div class="l">Hours</div></div><div class="cd-box"><div class="n" data-cd="minutes">--</div><div class="l">Minutes</div></div><div class="cd-box"><div class="n" data-cd="seconds">--</div><div class="l">Seconds</div></div></div>
+      </div>
+    <div class="fg" id="fgGallery">
+        <div class="cloud"><div class="fg-head"><span class="st">✦</span>PHOTO GALLERY<span class="st">✦</span></div></div>
+        <div class="gal-stage" id="galStage">
+          
+          <div class="gal-track" id="galTrack"><!-- Gallery photos are rendered here at runtime from config.js (WEDDING_CONFIG.gallery) --></div>
+          
+        </div>
+        <div class="gal-dots" id="galDots"></div>
+      </div>
+    <div class="fg" id="fgLocation">
+        <div class="cloud"><div class="fg-head" data-lc="head"><span class="st">✦</span>LOCATION<span class="st">✦</span></div></div>
+        <div class="fg-sub cloud2" data-lc="head">We can't wait to celebrate with you!</div>
+        <!-- Venue preview photo only — NOT a link. The "Open in Google
+             Maps" button below is the only element that opens Maps.
+             Replace assets/images/location-preview.jpg to change it. -->
+        <div class="loc-frame" data-lc="photo"><span class="loc-img"></span></div>
+        <div class="loc-textcloud"><div class="loc-name" data-lc="name">
+          <div class="loc-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/></svg></div>
+          <div class="nm" data-cfg="venueName">Cubbon Park, Bengaluru</div>
+        </div>
+        <div class="loc-addr" data-lc="addr" data-cfg="venueAddress">Kasturba Road, Sampangi Rama Nagara,<br>Bengaluru, Karnataka 560001</div></div>
+        <div class="loc-map" data-lc="map" id="locMap">
+          <button class="map-cta" id="mapCta" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l6-3 4 3 6-3v13l-6 3-4-3-6 3z"/><path d="M10 4v13M14 7v13"/></svg>
+            <span>View Map</span>
+          </button>
+        </div>
+        <a class="loc-open" data-lc="btn" id="locOpenLink" href="#" data-cfg-href="mapsLink" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7l6-3 4 3 6-3v13l-6 3-4-3-6 3z"/><path d="M10 4v13M14 7v13"/></svg>
+          Open in Google Maps</a>
+      </div>
+  </div>
+</div>
+
+
+<button class="music" id="musicBtn" aria-label="Toggle background music" aria-pressed="false">
+  <svg viewBox="0 0 40 40" aria-hidden="true">
+    <defs>
+      <linearGradient id="mg" x1="0" y1="0" x2=".7" y2="1">
+        <stop offset="0" style="stop-color:var(--gold-light)"/><stop offset=".45" style="stop-color:var(--gold)"/>
+        <stop offset="1" style="stop-color:var(--gold-deep)"/>
+      </linearGradient>
+    </defs>
+    <circle cx="20" cy="20" r="18.2" fill="none" stroke="url(#mg)" stroke-width="1.5"/>
+    <circle cx="20" cy="20" r="15.4" fill="none" stroke="url(#mg)" stroke-width=".7" opacity=".75"/>
+    <path d="M17 25.6V14.2l10-1.9v11.1" fill="none" stroke="url(#mg)" stroke-width="1.9"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="15.4" cy="25.9" rx="2.7" ry="2.3" fill="url(#mg)"/>
+    <ellipse cx="25.4" cy="23.9" rx="2.7" ry="2.3" fill="url(#mg)"/>
+  </svg>
+</button>
+
+<div class="loc-preview-overlay" id="locPreviewOverlay" aria-hidden="true">
+  <div class="loc-preview-backdrop" data-loc-preview-close></div>
+  <div class="loc-preview-panel" role="dialog" aria-modal="true" aria-label="Venue preview">
+    <button class="loc-preview-close" id="locPreviewClose" type="button" aria-label="Close preview">✕</button>
+    <div class="loc-preview-image"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="js/content.js"></script>
+<script src="js/poster.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/countdown.js"></script>
+<script src="js/music.js"></script>
+<script src="js/location.js"></script>
+<script src="js/scroll-guide.js"></script>
+</body>
+</html>
