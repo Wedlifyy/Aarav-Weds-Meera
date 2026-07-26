@@ -31,8 +31,9 @@
   // during scroll (60 forced reflows/sec, on top of every other frame's
   // style writes).
   let cachedStageW=stage.clientWidth;
+  let cachedStageRect=stage.getBoundingClientRect();
   function pointer(e){
-    const r=stage.getBoundingClientRect();
+    const r=cachedStageRect;
     tx=Math.max(-.5,Math.min(.5,(e.clientX-r.left)/r.width-.5));
     ty=Math.max(-.5,Math.min(.5,(e.clientY-r.top)/r.height-.5));
     const now=performance.now();
@@ -72,6 +73,7 @@
     }
     readScroll();
     cachedStageW = stage.clientWidth;
+    cachedStageRect = stage.getBoundingClientRect();
   }
   /* Perf: coalesce scroll reads into one rAF tick (avoids layout thrash
      from dozens of scroll events per frame on iOS momentum scrolling). */
@@ -157,7 +159,7 @@
     {const inv=document.getElementById('invite');
      if(inv){const q=e1;
        inv.style.opacity=String(1-q);
-       inv.style.transform=`translateY(${-q*26}dvh) scale(${1+q*0.14})`;
+       inv.style.transform=`translate3d(0,${-q*26}dvh,0) scale(${1+q*0.14})`;
        inv.style.visibility=q>0.995?'hidden':'visible';}}
 
     /* ===== foreground overlays revealed in sync with the camera =====
@@ -282,7 +284,6 @@
     }
     dustCleared=false;
     ctx.clearRect(0,0,CW(),CH());
-    ctx.shadowColor='rgba(240,204,126,.85)';ctx.shadowBlur=7;   // constant for every particle — set once/frame, not 70x
     const drift=1+p*2.2;
     for(const q of P){
       q.y+=q.vy*drift;q.x+=q.vx+Math.sin(q.a+=.012)*.09;
@@ -290,7 +291,7 @@
       if(q.x<-4)q.x=CW()+4;if(q.x>CW()+4)q.x=-4;
       const tw=.6+.4*Math.sin(q.a*3);
       ctx.beginPath();ctx.arc(q.x,q.y,q.r*(1+p*.8),0,7);
-      ctx.fillStyle=`rgba(224,186,110,${q.o*tw})`;
+      ctx.fillStyle=`rgba(235,200,125,${q.o*tw})`;
       ctx.fill();
     }
     if(NP)requestAnimationFrame(tick);
