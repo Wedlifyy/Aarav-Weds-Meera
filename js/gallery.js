@@ -54,7 +54,7 @@
         const sc=(0.64+0.36*depth*depth)*(1+0.16*focus);
         it.style.transform='translate3d('+(x*56)+'%,0,'+((z*72)+focus*40)+'px) scale('+sc+') rotateY('+(-x*17*(1-focus))+'deg)';
         it.style.zIndex=String(Math.round(depth*100)+(focus>0.5?200:0));
-        it.style.opacity=String(Math.min(1,(0.26+0.74*depth)+focus*0.3));
+        it.style.opacity=String(Math.min(1,(0.75+0.25*depth)+focus*0.25));
         it.style.filter='brightness('+(0.76+0.24*depth+focus*0.12)+') saturate('+(0.9+0.12*depth)+')';
         const front=Math.abs((((a+180)%360)+360)%360-180);
         if(front<best){best=front;bestI=i;}
