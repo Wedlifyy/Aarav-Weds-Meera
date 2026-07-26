@@ -30,13 +30,49 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Marcellus&family=Great+Vibes&family=Cormorant+Garamond:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <script>
+/* ================================================================
+   STABLE VIEWPORT HEIGHT — runs before first paint.
+   ----------------------------------------------------------------
+   In-app browsers (Instagram, Facebook, WhatsApp, Samsung Internet)
+   dynamically change window.innerHeight as their top/bottom toolbars
+   collapse or expand during scrolling.  This causes 100vh-based
+   layouts to constantly stretch and compress.
+
+   Solution: capture the visual viewport height ONCE on load, then
+   only recalculate when the viewport WIDTH changes (which means a
+   real orientation change or resize, not just a toolbar toggle).
+   The CSS custom property --app-height replaces all 100vh/100dvh
+   usage so the 9:16 stage never jumps.
+   ================================================================ */
 (function(){
-  function updateViewport(){
-    var h = (window.visualViewport && window.visualViewport.height) ? window.visualViewport.height : window.innerHeight;
+  var lastW = window.innerWidth;
+
+  function measure(){
+    var h = window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
     document.documentElement.style.setProperty('--app-height', h + 'px');
     document.documentElement.style.setProperty('--app-vh', (h * 0.01) + 'px');
   }
-  updateViewport();
+
+  /* Only recalculate when width actually changes — this filters out
+     Instagram/Safari toolbar show/hide which only changes height. */
+  function onResize(){
+    var w = window.innerWidth;
+    if(Math.abs(w - lastW) > 1){ lastW = w; measure(); }
+  }
+
+  measure();                                          /* initial capture */
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', function(){
+    setTimeout(measure, 200);                         /* delay lets OS settle */
+  });
+
+  /* visualViewport.resize fires on pinch-zoom AND toolbar changes.
+     We only care about the latter when it coincides with a width change. */
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', onResize);
+  }
 })();
 </script>
 </head>

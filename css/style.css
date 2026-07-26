@@ -456,11 +456,11 @@ html.hero-ready .inv-heart-orn{animation:inv-rise 1.2s 1.75s forwards}
 /* Inner layer: the actual 9:16 content box (identical sizing rules
    to .stage) — poster + splash video live inside this, so they can
    never stretch to full viewport width on desktop. */
-.opening-frame{position:relative;height:100vh;height:100dvh;
+.opening-frame{position:relative;height:var(--app-height, 100vh);
   aspect-ratio:9/16;max-width:100vw;overflow:hidden;background:#000;
   box-shadow:0 0 90px rgba(140,100,40,.4)}
 @media (max-aspect-ratio:9/16){
-  .opening-frame{width:100vw;height:auto;aspect-ratio:9/16;max-height:100dvh}
+  .opening-frame{width:100vw;height:auto;aspect-ratio:9/16;max-height:var(--app-height, 100vh)}
 }
 
 /* ---- cinematic close: soft gold light sweep + gentle fade ----
